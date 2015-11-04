@@ -6,6 +6,9 @@ object Example1 {
     val expected: List[Int] = List(4, 3, 2, 1, 0)
     
     println(reverse(input))
+    
+    println("Example on how to find if list is palindrome")
+    println(isPalindrome(List(0, 1, 2, 1, 0)))
 
     }
     def reverse[A] (list: List[A]) : List[A] = {
@@ -14,6 +17,17 @@ object Example1 {
                 reverse(tail) ::: List(h)
             case _ =>
                 Nil
+        }
+    }
+    
+    def isPalindrome(list: List[Any]) : Boolean = {
+        list match {
+            case Nil => // Zero elements
+                true
+            case List(a) => // Single element
+                true
+            case list => 
+                list.head == list.last && isPalindrome(list.init.tail)
         }
     }
 }
