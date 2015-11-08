@@ -23,17 +23,25 @@ class Network(layers: Layer*) {
                                .map( dim => {
                                    Array.ofDim[Double](dim._1, dim._2)
                                })
-        
+
     def predict(input: Array[Double]): Array[Double] = {
-        var intermediate: Array[Double] = input
+        var activations: Array[Double] = input
+
         // Head tail, init last
         for ((layer, i) <- layers.tail.zipWithIndex) {
-            val activations = layer.activate(intermediate)
-            println(intermediate)
-            // intermediate = activations * weights(i)
+            activations = weights(i).map { w_row =>
+              (w_row, activations).zipped map (_ * _) sum
+            }
+            activations = layer.activate(activations)
         }
-        Array(0, 0)
+        activations
   }
+
+    def train(input : Array[Double], output : Array[Double]) = {
+      // Forward pass
+      var predicted: Array[Double] = predict(input)
+      var sqError: Array[Double] = (predicted, output).zipped map ((a, b) => math.pow(a - b, 2))
+    }
 }
 
 class Layer(size: Int) {
@@ -42,9 +50,9 @@ class Layer(size: Int) {
     def activate(input: Array[Double]): Array[Double] = {
       (neurons, input).zipped map(_ activate _) toArray
     }
-    
+
     def size(): Int = neurons.size
-    
+
 }
 
 class Neuron (val activation: Double) {
@@ -53,6 +61,10 @@ class Neuron (val activation: Double) {
   }
 
   def activate(input: Double): Double = {
-    input * activation
+    squash(input * activation)
+  }
+
+  def squash(input: Double): Double = {
+    1.0/(1.0 + math.exp(-input))
   }
 }
