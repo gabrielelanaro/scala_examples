@@ -24,6 +24,6 @@ class FirstSpec extends FlatSpec {
       val array = new NDArray[Double](Array(0, 1, 2,
                                             3, 4, 5), List(2, 3))
 
-      array.sub(0, 1, Sub)
+      // array.slice(0, array.size, 0)
   }
 }

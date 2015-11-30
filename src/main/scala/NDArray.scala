@@ -1,4 +1,4 @@
-object Sub
+
 
 class NDArray[T](values: Array[T], dims: List[Int]) {
   val ndims: Int = dims.size
@@ -11,20 +11,29 @@ class NDArray[T](values: Array[T], dims: List[Int]) {
     values(column_major(index, dims))
   }
 
-  def sub (index: Any*): NDArray[T] = {
-    val slices = index map { ix =>
-      println(ix.getClass)
-      require(ix == Sub || ix.isInstanceOf[Int] )
-      ix match {
-        case ix: Int =>
-          false
-        case Sub =>
-          true
-      }
-    }
-    this
-  }
-
+  // def slice(first: Int, last: Int, axis: Int) : NDArray[T] {
+  //   /**
+  //    * Slice along a certain dimension
+  //    */
+  //    require(axis < ndims)
+  //
+  // }
+  // 
+  // def ix(index: Int, axis: Int) : NDArray[T] {
+  //   require(axis < ndims)
+  //   val newdims: List[Int] = for ((d, i) <- dims.zipWithIndex if i != axis) yield i
+  //
+  //   val ixToCombine = for ((i, dim) <- dims.zipWithIndex) {
+  //       if (i == axis) {
+  //         val indices = List(index)
+  //       }
+  //       else {
+  //         val indices = 0 to dim
+  //       }
+  //     } yield indices
+  //
+  //   ixToRetrieve = ixToCombine.foldLeft(_ cross _)
+  // }
   private def column_major(index: Seq[Int], dims: Seq[Int]): Int = {
     /**
      * Column major order -- we need to offset by the product of the remaining
